@@ -1,14 +1,19 @@
+import { hideEmail } from "@/utils/common";
 import {
   Button,
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   Heading,
   Input,
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { formatDistance } from "date-fns";
 import { FormikHelpers, useFormik } from "formik";
 import Image from "next/image";
 import { ReactNode, useState } from "react";
@@ -26,14 +31,57 @@ function CheckActiveNames(props: CheckActiveNamesProps) {
   const { children } = props;
   const [coach, setCoach] = useState<Coach>();
 
+  const toast = useToast();
+
   const handleCheckActiveName = async (
     { activeName }: ActiveNameFormInputs,
     { setSubmitting }: FormikHelpers<ActiveNameFormInputs>
   ) => {
-    console.log("activeName", activeName);
+    setCoach(undefined);
+    try {
+      const { data } = await axios.get(
+        `/api/v1/coaches?activeName=${activeName}Active`
+      );
+
+      console.log("data", data);
+
+      toast({
+        title: "Taken",
+        description: data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+
+      setCoach(data.coach);
+    } catch (error) {
+      console.error(error);
+
+      if (error.name === "AxiosError") {
+        toast({
+          title: "Success",
+          description: error.response.data.message,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      } else
+        toast({
+          title: "Failed",
+          description: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+    }
 
     setSubmitting(false);
   };
+
+  console.log("coach", coach);
 
   return (
     <>
@@ -67,11 +115,16 @@ export function CheckActiveNameForm(
   props: CheckActiveNameFormProps
 ): JSX.Element {
   const { coach, onCheckActiveName } = props;
+  console.log("🚀 ~ file: CheckActiveNames.tsx:112 ~ coach:", coach);
 
   const formik = useFormik({
     initialValues: { activeName: "" },
     validationSchema: yup.object().shape({
-      activeName: yup.string().required("Please enter active name."),
+      activeName: yup
+        .string()
+        .required("Please enter active name.")
+        .min(2, "Minimum of 2 characters")
+        .max(4, "Maximum of 4 characters"),
     }),
     onSubmit: onCheckActiveName,
   });
@@ -109,7 +162,7 @@ export function CheckActiveNameForm(
           fontSize={{ base: "sm", sm: "md" }}
           color={useColorModeValue("gray.800", "gray.400")}
         >
-          Enter active name and check availability.
+          Enter active name prefix and check availability.
         </Text>
         <form onSubmit={formik.handleSubmit}>
           <Stack spacing={6}>
@@ -132,12 +185,25 @@ export function CheckActiveNameForm(
                 onBlur={formik.handleBlur}
               />
 
-              {formik.errors.activeName && formik.touched.activeName && (
+              {formik.errors.activeName && formik.touched.activeName ? (
                 <FormErrorMessage fontSize="xs">
                   {formik.errors.activeName}
                 </FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  {`Only enter active name prefix, no need to add "Active"`};{" "}
+                </FormHelperText>
               )}
             </FormControl>
+            {coach ? (
+              <CoachDetail
+                activeName={coach.activeName}
+                name={coach.name}
+                email={coach.email}
+                joinDate={coach.joinDate}
+                rank={coach.rank}
+              />
+            ) : null}
             <Stack spacing={6}>
               <Button
                 bg={"blue.400"}
@@ -147,13 +213,60 @@ export function CheckActiveNameForm(
                 }}
                 loadingText="Checking..."
                 type="submit"
+                isLoading={formik.isSubmitting}
               >
-                Check
+                {formik.values.activeName
+                  ? `Check ${formik.values.activeName}Active`
+                  : "Check"}
               </Button>
             </Stack>
           </Stack>
         </form>
       </Stack>
     </Flex>
+  );
+}
+
+export function CoachDetail({
+  activeName,
+  email,
+  joinDate,
+  name,
+  rank,
+}: Coach) {
+  return (
+    <Stack
+      spacing={3}
+      border="1px solid"
+      borderColor="#9f9f9f"
+      p={4}
+      rounded="md"
+      bgGradient="linear(to-r, blue.100, teal.200)"
+    >
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontWeight="semibold">Name: </Text>
+        <Text fontWeight="bold">{name}</Text>
+      </Flex>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontWeight="semibold">Active Name: </Text>
+        <Text fontWeight="bold">{activeName}</Text>
+      </Flex>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontWeight="semibold">Rank: </Text>
+        <Text fontWeight="bold">{rank}</Text>
+      </Flex>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontWeight="semibold">Email: </Text>
+        <Text fontWeight="bold">{hideEmail(email)}</Text>
+      </Flex>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontWeight="semibold">Join Date: </Text>
+        <Text fontWeight="bold">
+          {formatDistance(new Date(joinDate), new Date(), {
+            addSuffix: true,
+          })}
+        </Text>
+      </Flex>
+    </Stack>
   );
 }
