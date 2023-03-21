@@ -34,12 +34,12 @@ export default async function handler(
         return res.status(404).json({
           success: false,
           coach: null,
-          message: "Active name not found.",
+          message: `${req.query?.activeName} name not yet taken.`,
         });
       } else
         res.status(200).json({
           success: true,
-          message: "Active name found.",
+          message: `${req.query?.activeName} name found.`,
           coach: JSON.parse(JSON.stringify(activeNamesExist)),
         });
     } catch (error) {
@@ -47,7 +47,7 @@ export default async function handler(
 
       res.status(400).json({
         success: false,
-        message: "Search active name failed.",
+        message: `Search ${req.query?.activeName} name failed.`,
         coach: null,
       });
     }
