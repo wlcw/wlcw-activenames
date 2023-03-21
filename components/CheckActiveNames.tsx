@@ -49,7 +49,7 @@ function CheckActiveNames(props: CheckActiveNamesProps) {
         title: "Taken",
         description: data.message,
         status: "error",
-        duration: 3000,
+        duration: 9000,
         isClosable: true,
         position: "top",
       });
@@ -63,7 +63,7 @@ function CheckActiveNames(props: CheckActiveNamesProps) {
           title: "Success",
           description: error.response.data.message,
           status: "success",
-          duration: 3000,
+          duration: 9000,
           isClosable: true,
           position: "top",
         });
@@ -72,7 +72,7 @@ function CheckActiveNames(props: CheckActiveNamesProps) {
           title: "Failed",
           description: error.message,
           status: "error",
-          duration: 3000,
+          duration: 9000,
           isClosable: true,
           position: "top",
         });
