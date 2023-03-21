@@ -43,8 +43,6 @@ function CheckActiveNames(props: CheckActiveNamesProps) {
         `/api/v1/coaches?activeName=${activeName}Active`
       );
 
-      console.log("data", data);
-
       toast({
         title: "Taken",
         description: data.message,
@@ -81,8 +79,6 @@ function CheckActiveNames(props: CheckActiveNamesProps) {
     setSubmitting(false);
   };
 
-  console.log("coach", coach);
-
   return (
     <>
       <CheckActiveNameForm
@@ -115,7 +111,6 @@ export function CheckActiveNameForm(
   props: CheckActiveNameFormProps
 ): JSX.Element {
   const { coach, onCheckActiveName } = props;
-  console.log("🚀 ~ file: CheckActiveNames.tsx:112 ~ coach:", coach);
 
   const formik = useFormik({
     initialValues: { activeName: "" },

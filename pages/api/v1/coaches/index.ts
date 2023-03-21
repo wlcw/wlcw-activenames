@@ -16,9 +16,6 @@ export default async function handler(
 ) {
   const { activeName } = req.body;
 
-  console.log("activeName", activeName);
-  console.log("activeName", req.query?.activeName);
-
   await dbConnect();
 
   if (req.method === "GET") {
