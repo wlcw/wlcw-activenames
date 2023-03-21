@@ -176,7 +176,7 @@ export function CheckActiveNameForm(
               id="activeName"
             >
               <Input
-                placeholder="bpActive"
+                placeholder="bp"
                 _placeholder={{ color: "gray.500" }}
                 name="activeName"
                 type="text"
