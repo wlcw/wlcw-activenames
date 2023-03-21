@@ -1,27 +1,27 @@
-import { DefaultResponse } from '@/lib/utils/api-helpers/APIResponse.types';
-import { PaginatedResults } from '@/lib/utils/api-helpers/getPaginatedResults';
+// import { DefaultResponse } from '@/lib/utils/api-helpers/APIResponse.types';
+// import { PaginatedResults } from '@/lib/utils/api-helpers/getPaginatedResults';
 
-import { ICoach } from '../coach/Coach.types';
+import { ICoach } from "../coach/Coach.types";
 
 export const ClientStatus = {
-  PROSPECTING: 'Prospecting',
-  VERIFICATION_LINK_SENT: 'Verification Link Sent',
-  FORM_LINK_SENT: 'Form Link Sent',
-  PAYMENT_LINK_SENT: 'Payment Link Sent',
-  MEDICAL_HISTORY_FORM_COMPLETED: 'Medical History Form Completed',
-  LIABILITY_FORM_COMPLETED: 'Liability Form Completed',
-  FORM_COMPLETED: 'Form Completed',
-  COMPLETED: 'Completed',
+  PROSPECTING: "Prospecting",
+  VERIFICATION_LINK_SENT: "Verification Link Sent",
+  FORM_LINK_SENT: "Form Link Sent",
+  PAYMENT_LINK_SENT: "Payment Link Sent",
+  MEDICAL_HISTORY_FORM_COMPLETED: "Medical History Form Completed",
+  LIABILITY_FORM_COMPLETED: "Liability Form Completed",
+  FORM_COMPLETED: "Form Completed",
+  COMPLETED: "Completed",
 };
 
 export const ClientOrderStatus = {
-  AWAITING_PAYMENT: 'Awaiting Payment',
-  PAID_AWAITING_VERIFICATION: 'Paid/Awaiting Verification',
+  AWAITING_PAYMENT: "Awaiting Payment",
+  PAID_AWAITING_VERIFICATION: "Paid/Awaiting Verification",
 };
 
-export interface AllProspectsResponse extends DefaultResponse {
-  results: PaginatedResults<PartialIProspect[] | []>;
-}
+// export interface AllProspectsResponse extends DefaultResponse {
+//   results: PaginatedResults<PartialIProspect[] | []>;
+// }
 
 export interface PartialIProspect extends Partial<IProspect> {}
 
