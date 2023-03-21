@@ -191,7 +191,7 @@ export function CheckActiveNameForm(
                 </FormErrorMessage>
               ) : (
                 <FormHelperText>
-                  {`Only enter active name prefix, no need to add "Active"`};{" "}
+                  {`Only enter active name prefix, no need to add "Active"`}
                 </FormHelperText>
               )}
             </FormControl>
