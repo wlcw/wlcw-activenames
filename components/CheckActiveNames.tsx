@@ -98,6 +98,11 @@ export type Coach = {
   email: string;
   joinDate: Date;
   rank: string;
+  emojiObject: Emoji;
+};
+export type Emoji = {
+  emoji: String;
+  unified: String;
 };
 type CheckActiveNameFormProps = {
   coach: Coach | null | undefined;
@@ -197,6 +202,7 @@ export function CheckActiveNameForm(
                 email={coach.email}
                 joinDate={coach.joinDate}
                 rank={coach.rank}
+                emojiObject={coach.emojiObject}
               />
             ) : null}
             <Stack spacing={6}>
@@ -227,16 +233,16 @@ export function CoachDetail({
   email,
   joinDate,
   name,
-  rank,
+  emojiObject,
 }: Coach) {
   return (
     <Stack
-      spacing={3}
+      spacing={2}
       border="1px solid"
       borderColor="#9f9f9f"
       p={4}
       rounded="md"
-      bgGradient="linear(to-r, blue.100, teal.200)"
+      bgGradient="linear(to-l, blue.100, teal.100)"
     >
       <Flex alignItems="center" justifyContent="space-between">
         <Text fontWeight="semibold">Name: </Text>
@@ -247,13 +253,17 @@ export function CoachDetail({
         <Text fontWeight="bold">{activeName}</Text>
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
-        <Text fontWeight="semibold">Rank: </Text>
-        <Text fontWeight="bold">{rank}</Text>
-      </Flex>
-      <Flex alignItems="center" justifyContent="space-between">
         <Text fontWeight="semibold">Email: </Text>
         <Text fontWeight="bold">{hideEmail(email)}</Text>
       </Flex>
+      {emojiObject?.emoji && (
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text fontWeight="semibold">Emoji: </Text>
+          <Text fontWeight="bold" fontSize="2xl">
+            {emojiObject?.emoji}
+          </Text>
+        </Flex>
+      )}
       <Flex alignItems="center" justifyContent="space-between">
         <Text fontWeight="semibold">Join Date: </Text>
         <Text fontWeight="bold">
